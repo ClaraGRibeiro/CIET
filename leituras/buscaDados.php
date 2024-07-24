@@ -47,7 +47,11 @@
                                     <td>Nome</td>
                                     <td>RG</td>
                                     <td>Email</td>
+                                    <td>Telefone</td>
                                     <td>UF</td>
+                                    <td>Cidade</td>
+                                    <td>Logradouro</td>
+                                    <td>Número</td>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -57,7 +61,11 @@
                             echo "<td>" . $row["nome"] . "</td>";
                             echo "<td>" . $row["rg"] . "</td>";
                             echo "<td>" . $row["email"] . "</td>";
+                            echo "<td>" . $row["telefone"] . "</td>";
                             echo "<td>" . $row["uf"] . "</td>";
+                            echo "<td>" . $row["cidade"] . "</td>";
+                            echo "<td>" . $row["logradouro"] . "</td>";
+                            echo "<td>" . $row["numero"] . "</td>";
                             echo "</tr>";
                         }
                     echo "</tbody></table>";
@@ -74,17 +82,22 @@
                                     <td>Código da Palestra</td>
                                     <td>Nome</td>
                                     <td>Categoria</td>
+                                    <td>Palestrante</td>
                                 </tr>
                             </thead>
                             <tbody>";
-                        while($row = mysqli_fetch_array($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row["codPalestra"] . "</td>";
-                            echo "<td>" . $row["nome"] . "</td>";
-                            if($row["categ"] == 'p'){echo "<td>Presencial</td>";}
-                            else if($row["categ"] == 'v'){echo "<td>Virtual</td>";}
-                            echo "</tr>";
-                        }
+                            while($row = mysqli_fetch_array($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row["codPalestra"] . "</td>";
+                                echo "<td>" . $row["nome"] . "</td>";
+                                if($row["categ"] == 'p'){echo "<td>Presencial</td>";}
+                                else if($row["categ"] == 'v'){echo "<td>Virtual</td>";}
+                            }
+                            $result = mysqli_query($conexao, "SELECT part.cpf, pess.nome FROM participacao part, pessoa pess, palestrante pales WHERE part.cpf=pess.cpf AND pales.cpf=pess.cpf");
+                            while($row = mysqli_fetch_array($result)) {
+                                echo "<td>" . $row["nome"] . "</td>";
+                                echo "</tr>";
+                            }
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestras</td></tr></table>";
@@ -100,17 +113,22 @@
                                     <td>Link da Foto</td>
                                     <td>Vulgo</td>
                                     <td>IES</td>
+                                    <td>Palestra</td>
                                 </tr>
                             </thead>
                             <tbody>";
-                        while($row = mysqli_fetch_array($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row["cpf"] . "</td>";
-                            echo "<td>" . $row["fotoLink"] . "</td>";
-                            echo "<td>" . $row["vulgo"] . "</td>";
-                            echo "<td>" . $row["ies"] . "</td>";
-                            echo "</tr>";
-                        }
+                            while($row = mysqli_fetch_array($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row["cpf"] . "</td>";
+                                echo "<td>" . $row["fotoLink"] . "</td>";
+                                echo "<td>" . $row["vulgo"] . "</td>";
+                                echo "<td>" . $row["ies"] . "</td>";
+                            }
+                            $result = mysqli_query($conexao, "SELECT part.cpf, pal.nome FROM participacao part, palestra pal, palestrante pales WHERE part.codAtiv=pal.codPalestra");
+                            while($row = mysqli_fetch_array($result)) {
+                                echo "<td>" . $row["nome"] . "</td>";
+                                echo "</tr>";
+                            }//CORRIGIIIIIIIIIIIIIIIIRRRR
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestrantes</td></tr></table>";

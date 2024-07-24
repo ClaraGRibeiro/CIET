@@ -1,10 +1,10 @@
 <?php
+    include('../bd/config.php');
     if(isset($_POST['enviar'])){
-        include('../bd/config.php');
 
         $cpf = $_POST['cpf'];
-        $tipoAtiv = $_POST['tipo'];
-        $codAtiv = $_POST['cod'];
+        $tipoAtiv = substr($_POST['cod'], 0, 1);
+        $codAtiv = substr($_POST['cod'], 1, (strlen($_POST['cod'])-1));
         $palestrante = $_POST['palestrante'];
         $inscricao = $_POST['inscricao'];
         $pagamento = $_POST['pagamento'];
@@ -41,18 +41,31 @@
     ?>
 <h1>CIET</h1>
 <h2>Cadastro da Participação</h2>
-<form action="cadParticipacao.php" method="post">
-    <label for="cpf">Digite o CPF da pessoa</label><br>
-    <input type="text" placeholder="ex.: 12345678910" name="cpf" id="cpf" required>
-    <br><br>
-    <select name="tipo" id="tipo" required>
-        <option value="" selected disabled>Selecione o tipo da atividade</option>
-        <option value="1">Palestra</option>
-        <option value="2">Painel</option>
+<form action="cadParticipacao.php" method="post" id="cadPart">
+    
+    <select name="cpf" id="cpf" required>
+        <option value="" selected disabled>Selecione a Pessoa</option>
+        <?php
+        $result = mysqli_query($conexao, "SELECT cpf, nome FROM pessoa");
+        while($row = mysqli_fetch_array($result)) {
+            echo "<option value=" . $row["cpf"] . ">" . $row["nome"] . " (". $row["cpf"] .")</option>";
+        }
+        ?>
     </select>
     <br><br>
-    <label for="cod">Digite o código da atividade</label><br>
-    <input type="text" placeholder="ex.: 31" name="cod" id="cod" required>
+    <select name="cod" id="cod">
+        <option value="" selected disabled>Selecione a Atividade</option>
+        <?php
+        $result = mysqli_query($conexao, "SELECT codPalestra AS 'cod', nome FROM palestra");
+        while($row = mysqli_fetch_array($result)) {
+            echo "<option value='1" . $row["cod"] . "'>Palestra - " . $row["nome"] . " (". $row["cod"] .")</option>";
+        }
+        $result = mysqli_query($conexao, "SELECT codPainel AS 'cod', nome FROM painel");
+        while($row = mysqli_fetch_array($result)) {
+            echo "<option value='2" . $row["cod"] . "'>Painel - " . $row["nome"] . " (". $row["cod"] .")</option>";
+        }
+        ?>
+    </select>
     <br><br>
     <label for="">Tipo de Incrição</label><br>
     <input type="radio" name="inscricao" value="s" id="sI">

@@ -23,9 +23,9 @@
         <option value="" selected disabled>Selecione a busca por Pessoa</option>
         <?php
         include('../bd/config.php');
-        $result = mysqli_query($conexao, "SELECT cpf FROM pessoa");
+        $result = mysqli_query($conexao, "SELECT cpf, nome FROM pessoa");
         while($row = mysqli_fetch_array($result)) {
-            echo "<option value=" . $row["cpf"] . ">" . $row["cpf"] . "</option>";
+            echo "<option value=" . $row["cpf"] . ">" . $row["nome"] . " (". $row["cpf"] .")</option>";
         }
         ?>
     </select>
@@ -95,11 +95,13 @@
                 ";
                                 if($row["tipoAtiv"] == '1'){echo "<td>Palestra</td>";}
                                 else if($row["tipoAtiv"] == '2'){echo "<td>Painel</td>";}
+                echo "
+                                <td>" . $row["nomeAtiv"] . "</td>
+                ";
                                 if($row["categ"] == 'p'){echo "<td>Presencial</td>";}
                                 else if($row["categ"] == 'v'){echo "<td>Virtual</td>";}
                                 else{echo "<td>" . $row["categ"] . "</td>";}
                 echo "
-                                <td>" . $row["nomeAtiv"] . "</td>
                             </tr>";
                 }
             echo "
