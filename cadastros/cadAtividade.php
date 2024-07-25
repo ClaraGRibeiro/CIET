@@ -87,7 +87,7 @@ if (isset($_POST['escolherTipo'])){
             <a class=\"link\" href=\"./cadPalestrante.php\">Não está aqui? Cadastre o palestrante no sistema.</a>
             <br><br>
         ";
-                $result = mysqli_query($conexao, "SELECT pa.cpf, pe.nome FROM palestrante pa, pessoa pe WHERE pa.cpf=pe.cpf");
+                $result = mysqli_query($conexao, "SELECT pa.cpf, pe.nome FROM palestrante pa, pessoa pe WHERE pa.cpf=pe.cpf ORDER BY nome");
                 while($row = mysqli_fetch_array($result)) {
                     echo "<input type='checkbox' value=" . $row["cpf"] . " name='cpf[]' id=" . $row["cpf"] . "><label for='" . $row["cpf"] . "'> " . $row["nome"] . " (". $row["cpf"] .")</label><br>";
                 }

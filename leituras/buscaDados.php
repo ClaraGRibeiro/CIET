@@ -88,13 +88,17 @@
                                 echo "<td>" . $row["nome"] . "</td>";
                                 if($row["categ"] == 'p'){echo "<td>Presencial</td>";}
                                 else if($row["categ"] == 'v'){echo "<td>Virtual</td>";}
+
+                                echo "<td>";
+                                $resultCpf = mysqli_query($conexao, "SELECT palpal.codPalestra, palpal.cpf, pessoa.nome FROM palpal, pessoa WHERE palpal.codPalestra={$row["codPalestra"]} AND pessoa.cpf=palpal.cpf ORDER BY palpal.cpf");
+                                
+                                if ($resultCpf->num_rows > 0) {
+                                    while($rowCpf = mysqli_fetch_array($resultCpf)) {///  CORRIGIR
+                                        echo $rowCpf["cpf"] . " ({$rowCpf["nome"]})<br>";
+                                    }
+                                }
+                                echo "</td></tr>";
                             }
-                            echo "<td>";
-                            $result = mysqli_query($conexao, "SELECT palestrante.cpf FROM palestra, palestrante, palpal WHERE palestrante.cpf=palpal.cpf AND palestra.codPalestra=palpal.codPalestra");
-                            while($row = mysqli_fetch_array($result)) {///  CORRIGIR
-                                echo $row["cpf"] . "<br>";
-                            }
-                            echo "</td></tr>";
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestras</td></tr></table>";
@@ -120,13 +124,17 @@
                                 echo "<td>" . $row["fotoLink"] . "</td>";
                                 echo "<td>" . $row["vulgo"] . "</td>";
                                 echo "<td>" . $row["ies"] . "</td>";
+
+                                echo "<td>";
+                                $resultCod = mysqli_query($conexao, "SELECT palpal.cpf, palpal.codPalestra, palestra.nome FROM palpal, palestra WHERE palpal.cpf={$row['cpf']} AND palestra.codPalestra=palpal.codPalestra ORDER BY palpal.codPalestra");
+                                
+                                if ($resultCod->num_rows > 0) {
+                                    while($rowCod = mysqli_fetch_array($resultCod)) {
+                                        echo $rowCod["codPalestra"] . " ({$rowCod["nome"]})<br>";
+                                    }
+                                }
+                                echo "</td></tr>";
                             }
-                            echo "<td>";
-                            $result = mysqli_query($conexao, "SELECT palestra.codPalestra FROM palestra, palestrante, palpal WHERE palestrante.cpf=palpal.cpf AND palestra.codPalestra=palpal.codPalestra");
-                            while($row = mysqli_fetch_array($result)) {///  CORRIGIR
-                                echo $row["codPalestra"] . "<br>";
-                            }
-                            echo "</td></tr>";
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestrantes</td></tr></table>";
@@ -163,7 +171,6 @@
                                     <td>CPF</td>
                                     <td>Tipo de Atividade</td>
                                     <td>Código da Atividade</td>
-                                    <td>Palestrante</td>
                                     <td>Tipo de Inscrição</td>
                                     <td>Tipo de Pagamento</td>
                                     <td>Título</td>
@@ -177,9 +184,7 @@
                             if($row["tipoAtiv"] == '1'){echo "<td>Palestra</td>";}
                             else if($row["tipoAtiv"] == '2'){echo "<td>Painel</td>";}
                             echo "<td>" . $row["codAtiv"] . "</td>";
-                            if($row["palestrante"] == 's'){echo "<td>Sim</td>";}
-                            else if($row["palestrante"] == 'n'){echo "<td>Não</td>";}
-
+                            
                             if($row["inscricao"] == 's'){echo "<td>Inscrito</td>";}
                             else if($row["inscricao"] == 'n'){echo "<td>Não Inscrito</td>";}
 

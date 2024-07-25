@@ -10,8 +10,8 @@
         $titulo = $_POST['titulo'];
         $linkCertif = $_POST['certif'];
 
-        mysqli_query($conexao, "INSERT INTO participacao(cpf, tipoAtiv, codAtiv, palestrante, inscricao, pagamento, titulo, linkCertif)
-        VALUES ('$cpf', '$tipoAtiv', '$codAtiv', '$palestrante', '$inscricao', '$pagamento', '$titulo', '$linkCertif')");
+        mysqli_query($conexao, "INSERT INTO participacao(cpf, tipoAtiv, codAtiv, inscricao, pagamento, titulo, linkCertif)
+        VALUES ('$cpf', '$tipoAtiv', '$codAtiv', '$inscricao', '$pagamento', '$titulo', '$linkCertif')");
 
     }
 ?>
@@ -34,7 +34,7 @@
     <select name="cpf" id="cpf" required>
         <option value="" selected disabled>Selecione a Pessoa</option>
         <?php
-        $result = mysqli_query($conexao, "SELECT cpf, nome FROM pessoa");
+        $result = mysqli_query($conexao, "SELECT cpf, nome FROM pessoa ORDER BY nome");
         while($row = mysqli_fetch_array($result)) {
             echo "<option value=" . $row["cpf"] . ">" . $row["nome"] . " (". $row["cpf"] .")</option>";
         }
