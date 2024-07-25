@@ -19,19 +19,15 @@
 <h1>CIET</h1>
 <h2>Busca por Dados</h2>
 <form action="buscaDados.php" method="post">
-    <select name="busca" id="busca" required>
-        <option value="" selected disabled>Selecione a busca</option>
-        <option value="1">Pessoas</option>
-        <option value="2">Palestras</option>
-        <option value="3">Palestrantes</option>
-        <option value="4">Painéis</option>
-        <option value="5">Participações</option>
-    </select>
-    <button type="submit" name="enviar" id="enviar">Enviar</button>
+    <button type="submit" name="busca" id="busca" value="1">Pessoas</button>
+    <button type="submit" name="busca" id="busca" value="2">Palestras</button>
+    <button type="submit" name="busca" id="busca" value="3">Palestrantes</button>
+    <button type="submit" name="busca" id="busca" value="4">Painéis</button>
+    <button type="submit" name="busca" id="busca" value="5">Participações</button>
 </form>
 <br><br>
 <?php
-    if(isset($_POST['enviar'])){
+    if(isset($_POST['busca'])){
         include('../bd/config.php');
 
         $busca = $_POST['busca'];
@@ -82,7 +78,7 @@
                                     <td>Código da Palestra</td>
                                     <td>Nome</td>
                                     <td>Categoria</td>
-                                    <td>Palestrante</td>
+                                    <td>Palestrante(s)</td>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -93,11 +89,12 @@
                                 if($row["categ"] == 'p'){echo "<td>Presencial</td>";}
                                 else if($row["categ"] == 'v'){echo "<td>Virtual</td>";}
                             }
-                            $result = mysqli_query($conexao, "SELECT part.cpf, pess.nome FROM participacao part, pessoa pess, palestrante pales WHERE part.cpf=pess.cpf AND pales.cpf=pess.cpf");
-                            while($row = mysqli_fetch_array($result)) {
-                                echo "<td>" . $row["nome"] . "</td>";
-                                echo "</tr>";
+                            echo "<td>";
+                            $result = mysqli_query($conexao, "SELECT palestrante.cpf FROM palestra, palestrante, palpal WHERE palestrante.cpf=palpal.cpf AND palestra.codPalestra=palpal.codPalestra");
+                            while($row = mysqli_fetch_array($result)) {///  CORRIGIR
+                                echo $row["cpf"] . "<br>";
                             }
+                            echo "</td></tr>";
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestras</td></tr></table>";
@@ -124,11 +121,12 @@
                                 echo "<td>" . $row["vulgo"] . "</td>";
                                 echo "<td>" . $row["ies"] . "</td>";
                             }
-                            $result = mysqli_query($conexao, "SELECT part.cpf, pal.nome FROM participacao part, palestra pal, palestrante pales WHERE part.codAtiv=pal.codPalestra");
-                            while($row = mysqli_fetch_array($result)) {
-                                echo "<td>" . $row["nome"] . "</td>";
-                                echo "</tr>";
-                            }//CORRIGIIIIIIIIIIIIIIIIRRRR
+                            echo "<td>";
+                            $result = mysqli_query($conexao, "SELECT palestra.codPalestra FROM palestra, palestrante, palpal WHERE palestrante.cpf=palpal.cpf AND palestra.codPalestra=palpal.codPalestra");
+                            while($row = mysqli_fetch_array($result)) {///  CORRIGIR
+                                echo $row["codPalestra"] . "<br>";
+                            }
+                            echo "</td></tr>";
                     echo "</tbody></table>";
                 } else {
                     echo "<table><tr><td>0 resultados para Palestrantes</td></tr></table>";

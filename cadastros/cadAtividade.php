@@ -1,6 +1,6 @@
 <?php
     include('../bd/config.php');
-    if(isset($_POST['cadastrar'])){
+    if(isset($_POST['enviar'])){
 
         $codAtiv = $_POST['cod'];
         $tipoAtiv = $_POST['tipoAtiv'];
@@ -11,11 +11,18 @@
 
         if($tipoAtiv == 1){
             $categ = $_POST['categ'];
-            $cpf = $_POST['cpf'];
             mysqli_query($conexao, "INSERT INTO palestra(codPalestra, nome, categ)
             VALUES ('$codAtiv', '$nome', '$categ')");
-            mysqli_query($conexao, "INSERT INTO palpal(cpf, codPalestra)
-            VALUES ('$cpf', '$codAtiv')");
+            $cpfs = null;
+            if(isset($_POST['cpf'])){
+                $cpfs = $_POST['cpf'];
+                if($cpfs !== null){
+                    for($i=0; $i<count($cpfs); $i++){
+                        mysqli_query($conexao, "INSERT INTO palpal(cpf, codPalestra)
+                        VALUES ('$cpfs[$i]', '$codAtiv')");
+                    }
+                }
+            }
         }
         if($tipoAtiv == 2){
             mysqli_query($conexao, "INSERT INTO painel(codPainel, nome)
@@ -75,20 +82,21 @@ if (isset($_POST['escolherTipo'])){
             <input type=\"radio\" name=\"categ\" value=\"v\" id=\"v\">
             <label for=\"v\">Virtual</label>
             <br><br>
-            <select name='cpf' id='cpf' required>
-                <option value='' selected disabled>Selecione o Palestrante</option>
+            
+            <label for=''>Selecione o(s) Palestrante(s)</label><br>
+            <a class=\"link\" href=\"./cadPalestrante.php\">Não está aqui? Cadastre o palestrante no sistema.</a>
+            <br><br>
         ";
-                $result = mysqli_query($conexao, "SELECT pa.cpf, pe.nome FROM palestrante pa, pessoa pe WHERE pa.cpf = pe.cpf");
+                $result = mysqli_query($conexao, "SELECT pa.cpf, pe.nome FROM palestrante pa, pessoa pe WHERE pa.cpf=pe.cpf");
                 while($row = mysqli_fetch_array($result)) {
-                    echo "<option value=" . $row["cpf"] . ">" . $row["nome"] . " (". $row["cpf"] .")</option>";
+                    echo "<input type='checkbox' value=" . $row["cpf"] . " name='cpf[]' id=" . $row["cpf"] . "><label for='" . $row["cpf"] . "'> " . $row["nome"] . " (". $row["cpf"] .")</label><br>";
                 }
         echo"
-            </select>
+            <br><br>
         ";
     }
     echo "
-            <br><br>
-            <button type=\"submit\" name=\"cadastrar\" id=\"cadastrar\">Cadastrar $tituloForm</button>
+            <button type=\"submit\" name=\"enviar\" id=\"enviar\">Cadastrar $tituloForm</button>
         </form>
     ";
 }
